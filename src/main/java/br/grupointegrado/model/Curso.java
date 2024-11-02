@@ -2,7 +2,6 @@ package br.grupointegrado.model;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,13 +12,12 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titulo;
+    private String nome;
+
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    private BigDecimal preco;
-
-    @Column(name = "pdf_url")
-    private String pdfUrl;
+    private double preco;
 
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
@@ -36,12 +34,12 @@ public class Curso {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
@@ -52,20 +50,12 @@ public class Curso {
         this.descricao = descricao;
     }
 
-    public BigDecimal getPreco() {
+    public double getPreco() {
         return preco;
     }
 
-    public void setPreco(BigDecimal preco) {
+    public void setPreco(double preco) {
         this.preco = preco;
-    }
-
-    public String getPdfUrl() {
-        return pdfUrl;
-    }
-
-    public void setPdfUrl(String pdfUrl) {
-        this.pdfUrl = pdfUrl;
     }
 
     public LocalDateTime getDataCriacao() {
@@ -80,10 +70,9 @@ public class Curso {
     public String toString() {
         return "Curso{" +
                 "id=" + id +
-                ", titulo='" + titulo + '\'' +
+                ", nome='" + nome + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", preco=" + preco +
-                ", pdfUrl='" + pdfUrl + '\'' +
                 ", dataCriacao=" + dataCriacao +
                 '}';
     }

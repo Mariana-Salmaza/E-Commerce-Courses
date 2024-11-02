@@ -12,20 +12,22 @@ public class Pagamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "compra_id")
-    private Long compraId;
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
+    private Pedido pedido;
 
-    @Column(name = "metodo_pagamento")
-    private String metodoPagamento;
+    @ManyToOne
+    @JoinColumn(name = "id_forma_pagamento", nullable = false)
+    private FormaPagamento formaPagamento;
 
-    private String status;
+    @Column(name = "status_pagamento", nullable = false)
+    private String statusPagamento; // PAGO, PENDENTE, CANCELADO
 
     @Column(name = "data_pagamento")
     private LocalDateTime dataPagamento;
 
     public Pagamento() {
         this.dataPagamento = LocalDateTime.now();
-        this.status = "concluído";
     }
 
     public Long getId() {
@@ -36,28 +38,28 @@ public class Pagamento {
         this.id = id;
     }
 
-    public Long getCompraId() {
-        return compraId;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setCompraId(Long compraId) {
-        this.compraId = compraId;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
-    public String getMetodoPagamento() {
-        return metodoPagamento;
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
     }
 
-    public void setMetodoPagamento(String metodoPagamento) {
-        this.metodoPagamento = metodoPagamento;
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusPagamento() {
+        return statusPagamento;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusPagamento(String statusPagamento) {
+        this.statusPagamento = statusPagamento;
     }
 
     public LocalDateTime getDataPagamento() {
@@ -72,9 +74,9 @@ public class Pagamento {
     public String toString() {
         return "Pagamento{" +
                 "id=" + id +
-                ", compraId=" + compraId +
-                ", metodoPagamento='" + metodoPagamento + '\'' +
-                ", status='" + status + '\'' +
+                ", pedido=" + pedido +
+                ", formaPagamento=" + formaPagamento +
+                ", statusPagamento='" + statusPagamento + '\'' +
                 ", dataPagamento=" + dataPagamento +
                 '}';
     }

@@ -17,11 +17,16 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(length = 255, nullable = false)
     private String senha;
 
-    @Column(name = "data_criacao")
+    @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
     public Usuario() {
@@ -74,9 +79,8 @@ public class Usuario {
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", senha='*****'" +  // Oculta a senha
+                ", senha='*****'" +
                 ", dataCriacao=" + dataCriacao +
                 '}';
     }
-    
 }
