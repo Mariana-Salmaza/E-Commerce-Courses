@@ -1,8 +1,9 @@
 package br.grupointegrado.model;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pagamento")
@@ -10,48 +11,49 @@ public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_pag")
+    private Integer idPag;
 
-    @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
-    private Pedido pedido;
+    @Column(name = "vl_pedido", nullable = false)
+    private BigDecimal vlPedido;
 
-    @ManyToOne
-    @JoinColumn(name = "id_forma_pagamento", nullable = false)
-    private FormaPagamento formaPagamento;
+    @Column(name = "dt_pagamento")
+    private Date dtPagamento;
 
-    @Column(name = "status_pagamento", nullable = false)
-    private String statusPagamento; // PAGO, PENDENTE, CANCELADO
+    @Column(name = "status_pagamento", nullable = false, length = 20)
+    private String statusPagamento;
 
-    @Column(name = "data_pagamento")
-    private LocalDateTime dataPagamento;
+    @ManyToMany
+    @JoinTable(
+        name = "pag_forma",
+        joinColumns = @JoinColumn(name = "id_pag"),
+        inverseJoinColumns = @JoinColumn(name = "id_forma")
+    )
+    private List<FormaPagamento> formasPagamento;
 
-    public Pagamento() {
-        this.dataPagamento = LocalDateTime.now();
+
+    public Integer getIdPag() {
+        return idPag;
     }
 
-    public Long getId() {
-        return id;
+    public void setIdPag(Integer idPag) {
+        this.idPag = idPag;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public BigDecimal getVlPedido() {
+        return vlPedido;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public void setVlPedido(BigDecimal vlPedido) {
+        this.vlPedido = vlPedido;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public Date getDtPagamento() {
+        return dtPagamento;
     }
 
-    public FormaPagamento getFormaPagamento() {
-        return formaPagamento;
-    }
-
-    public void setFormaPagamento(FormaPagamento formaPagamento) {
-        this.formaPagamento = formaPagamento;
+    public void setDtPagamento(Date dtPagamento) {
+        this.dtPagamento = dtPagamento;
     }
 
     public String getStatusPagamento() {
@@ -62,22 +64,21 @@ public class Pagamento {
         this.statusPagamento = statusPagamento;
     }
 
-    public LocalDateTime getDataPagamento() {
-        return dataPagamento;
+    public List<FormaPagamento> getFormasPagamento() {
+        return formasPagamento;
     }
 
-    public void setDataPagamento(LocalDateTime dataPagamento) {
-        this.dataPagamento = dataPagamento;
+    public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
+        this.formasPagamento = formasPagamento;
     }
 
     @Override
     public String toString() {
         return "Pagamento{" +
-                "id=" + id +
-                ", pedido=" + pedido +
-                ", formaPagamento=" + formaPagamento +
+                "idPag=" + idPag +
+                ", vlPedido=" + vlPedido +
+                ", dtPagamento=" + dtPagamento +
                 ", statusPagamento='" + statusPagamento + '\'' +
-                ", dataPagamento=" + dataPagamento +
                 '}';
     }
 }

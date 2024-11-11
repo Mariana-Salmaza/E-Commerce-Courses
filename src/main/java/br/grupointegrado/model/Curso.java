@@ -1,8 +1,7 @@
 package br.grupointegrado.model;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "curso")
@@ -10,70 +9,46 @@ public class Curso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_curso")
+    private Integer idCurso;
 
-    private String nome;
+    @Column(name = "nm_curso", nullable = false, length = 100)
+    private String nomeCurso;
 
-    @Column(columnDefinition = "TEXT")
-    private String descricao;
+    @Column(name = "vl_curso", nullable = false)
+    private BigDecimal valorCurso;
 
-    private double preco;
 
-    @Column(name = "data_criacao")
-    private LocalDateTime dataCriacao;
-
-    public Curso() {
-        this.dataCriacao = LocalDateTime.now();
+    public Integer getIdCurso() {
+        return idCurso;
     }
 
-    public Long getId() {
-        return id;
+    public void setIdCurso(Integer idCurso) {
+        this.idCurso = idCurso;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getNomeCurso() {
+        return nomeCurso;
     }
 
-    public String getNome() {
-        return nome;
+    public void setNomeCurso(String nomeCurso) {
+        this.nomeCurso = nomeCurso;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public BigDecimal getValorCurso() {
+        return valorCurso;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public void setValorCurso(BigDecimal valorCurso) {
+        this.valorCurso = valorCurso;
     }
 
     @Override
     public String toString() {
         return "Curso{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", preco=" + preco +
-                ", dataCriacao=" + dataCriacao +
+                "idCurso=" + idCurso +
+                ", nomeCurso='" + nomeCurso + '\'' +
+                ", valorCurso=" + valorCurso +
                 '}';
     }
 }

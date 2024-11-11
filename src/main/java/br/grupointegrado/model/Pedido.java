@@ -1,8 +1,7 @@
 package br.grupointegrado.model;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "pedido")
@@ -10,62 +9,72 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_pedido")
+    private Integer idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "id_user")
+    private User user;
 
-    @Column(name = "data_pedido")
-    private LocalDateTime dataPedido;
+    @ManyToOne
+    @JoinColumn(name = "id_pag")
+    private Pagamento pagamento;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(name = "pago", nullable = false)
+    private Boolean pago;
 
-    public Pedido() {
-        this.dataPedido = LocalDateTime.now();
-        this.status = "PENDENTE";
+    @Column(name = "data_pedido", nullable = false)
+    private Date dataPedido;
+
+
+    public Integer getIdPedido() {
+        return idPedido;
     }
 
-    public Long getId() {
-        return id;
+    public void setIdPedido(Integer idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User getUser() {
+        return user;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public Pagamento getPagamento() {
+        return pagamento;
     }
 
-    public LocalDateTime getDataPedido() {
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    public Boolean getPago() {
+        return pago;
+    }
+
+    public void setPago(Boolean pago) {
+        this.pago = pago;
+    }
+
+    public Date getDataPedido() {
         return dataPedido;
     }
 
-    public void setDataPedido(LocalDateTime dataPedido) {
+    public void setDataPedido(Date dataPedido) {
         this.dataPedido = dataPedido;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Pedido{" +
-                "id=" + id +
-                ", usuario=" + usuario +
+                "idPedido=" + idPedido +
+                ", user=" + user +
+                ", pagamento=" + pagamento +
+                ", pago=" + pago +
                 ", dataPedido=" + dataPedido +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

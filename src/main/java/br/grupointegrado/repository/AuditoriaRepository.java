@@ -1,10 +1,9 @@
 package br.grupointegrado.repository;
 
-import br.grupointegrado.model.AuditPrecoCurso;
+import br.grupointegrado.model.Auditoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuditPrecoCursoRepository extends JpaRepository<AuditPrecoCurso, Long> {
-
+public interface AuditoriaRepository extends JpaRepository<Auditoria, Integer> {
 }

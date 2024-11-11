@@ -1,10 +1,9 @@
 package br.grupointegrado.repository;
 
-import br.grupointegrado.model.Usuario;
+import br.grupointegrado.model.PedidoCurso;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Usuario findByEmail(String email);
+public interface PedidoCursoRepository extends JpaRepository<PedidoCurso, Integer> {
 }

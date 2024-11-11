@@ -8,16 +8,29 @@ public class FormaPagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_forma")
+    private Integer idForma;
 
+    @Column(name = "nome_forma", nullable = false, length = 50)
+    private String nomeForma;
+
+    @Column(name = "descricao")
     private String descricao;
 
-    public Long getId() {
-        return id;
+    public Integer getIdForma() {
+        return idForma;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdForma(Integer idForma) {
+        this.idForma = idForma;
+    }
+
+    public String getNomeForma() {
+        return nomeForma;
+    }
+
+    public void setNomeForma(String nomeForma) {
+        this.nomeForma = nomeForma;
     }
 
     public String getDescricao() {
@@ -31,7 +44,8 @@ public class FormaPagamento {
     @Override
     public String toString() {
         return "FormaPagamento{" +
-                "id=" + id +
+                "idForma=" + idForma +
+                ", nomeForma='" + nomeForma + '\'' +
                 ", descricao='" + descricao + '\'' +
                 '}';
     }
