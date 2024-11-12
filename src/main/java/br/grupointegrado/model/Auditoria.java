@@ -31,6 +31,17 @@ public class Auditoria {
     private String dadosNovos;
 
 
+    public Auditoria() {}
+
+    public Auditoria(String tabelaAfetada, String acao, String motivo, Date data, String dadosAnteriores, String dadosNovos) {
+        this.tabelaAfetada = tabelaAfetada;
+        this.acao = acao;
+        this.motivo = motivo;
+        this.data = data;
+        this.dadosAnteriores = dadosAnteriores;
+        this.dadosNovos = dadosNovos;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -2,8 +2,7 @@ package br.grupointegrado.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 
 @Entity
 @Table(name = "pagamento")
@@ -12,16 +11,16 @@ public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pag")
-    private Integer idPag;
+    private Integer idPagamento;
 
     @Column(name = "vl_pedido", nullable = false)
-    private BigDecimal vlPedido;
+    private BigDecimal valor;
 
     @Column(name = "dt_pagamento")
-    private Date dtPagamento;
+    private Date dataPagamento;
 
-    @Column(name = "status_pagamento", nullable = false, length = 20)
-    private String statusPagamento;
+    @Column(name = "status_pagamento", nullable = false, length = 50)
+    private String status;
 
     @ManyToMany
     @JoinTable(
@@ -29,56 +28,65 @@ public class Pagamento {
         joinColumns = @JoinColumn(name = "id_pag"),
         inverseJoinColumns = @JoinColumn(name = "id_forma")
     )
-    private List<FormaPagamento> formasPagamento;
+    private FormaPagamento formaPagamento;
 
+    public Pagamento() {}
 
-    public Integer getIdPag() {
-        return idPag;
+    public Pagamento(BigDecimal valor, FormaPagamento formaPagamento, String status, Date dataPagamento) {
+        this.valor = valor;
+        this.formaPagamento = formaPagamento;
+        this.status = status;
+        this.dataPagamento = dataPagamento;
     }
 
-    public void setIdPag(Integer idPag) {
-        this.idPag = idPag;
+    public Integer getIdPagamento() {
+        return idPagamento;
     }
 
-    public BigDecimal getVlPedido() {
-        return vlPedido;
+    public void setIdPagamento(Integer idPagamento) {
+        this.idPagamento = idPagamento;
     }
 
-    public void setVlPedido(BigDecimal vlPedido) {
-        this.vlPedido = vlPedido;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public Date getDtPagamento() {
-        return dtPagamento;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
-    public void setDtPagamento(Date dtPagamento) {
-        this.dtPagamento = dtPagamento;
+    public Date getDataPagamento() {
+        return dataPagamento;
     }
 
-    public String getStatusPagamento() {
-        return statusPagamento;
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
     }
 
-    public void setStatusPagamento(String statusPagamento) {
-        this.statusPagamento = statusPagamento;
+    public String getStatus() {
+        return status;
     }
 
-    public List<FormaPagamento> getFormasPagamento() {
-        return formasPagamento;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
-        this.formasPagamento = formasPagamento;
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
     @Override
     public String toString() {
         return "Pagamento{" +
-                "idPag=" + idPag +
-                ", vlPedido=" + vlPedido +
-                ", dtPagamento=" + dtPagamento +
-                ", statusPagamento='" + statusPagamento + '\'' +
+                "idPagamento=" + idPagamento +
+                ", valor=" + valor +
+                ", dataPagamento=" + dataPagamento +
+                ", status='" + status + '\'' +
+                ", formaPagamento=" + formaPagamento +
                 '}';
     }
 }

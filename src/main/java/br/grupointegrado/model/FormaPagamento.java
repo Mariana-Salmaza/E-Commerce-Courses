@@ -17,6 +17,14 @@ public class FormaPagamento {
     @Column(name = "descricao")
     private String descricao;
 
+    public FormaPagamento(String nomeForma, String descricao) {
+        this.nomeForma = nomeForma;
+        this.descricao = descricao;
+    }
+
+    public FormaPagamento() {
+    }
+
     public Integer getIdForma() {
         return idForma;
     }

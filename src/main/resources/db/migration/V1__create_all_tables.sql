@@ -29,7 +29,8 @@ CREATE TABLE User (
 CREATE TABLE Curso (
     id_curso INT AUTO_INCREMENT PRIMARY KEY,
     nm_curso VARCHAR(100) NOT NULL,
-    vl_curso DECIMAL(10, 2) NOT NULL
+    vl_curso DECIMAL(10, 2) NOT NULL,
+    descricao TEXT
 );
 
 CREATE TABLE Pedido (

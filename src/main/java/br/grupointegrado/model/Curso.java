@@ -18,6 +18,17 @@ public class Curso {
     @Column(name = "vl_curso", nullable = false)
     private BigDecimal valorCurso;
 
+    @Column(name = "descricao", columnDefinition = "TEXT")
+    private String descricao;
+
+    public Curso(String nomeCurso, BigDecimal valorCurso, String descricao) {
+        this.nomeCurso = nomeCurso;
+        this.valorCurso = valorCurso;
+        this.descricao = descricao;
+    }
+
+    public Curso() {
+    }
 
     public Integer getIdCurso() {
         return idCurso;
@@ -43,12 +54,21 @@ public class Curso {
         this.valorCurso = valorCurso;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     @Override
     public String toString() {
         return "Curso{" +
                 "idCurso=" + idCurso +
                 ", nomeCurso='" + nomeCurso + '\'' +
                 ", valorCurso=" + valorCurso +
+                ", descricao='" + descricao + '\'' +
                 '}';
     }
 }
