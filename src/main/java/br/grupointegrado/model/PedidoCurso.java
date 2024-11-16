@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "pedido_curso")
 public class PedidoCurso {
 
+    @Id
+    private Integer id;
+
     @ManyToOne
     @JoinColumn(name = "id_curso")
     private Curso curso;
@@ -14,7 +17,7 @@ public class PedidoCurso {
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
 
-    @Column(name = "quantidade", nullable = false)
+    @Column(name = "quantidade")
     private Integer quantidade;
 
     

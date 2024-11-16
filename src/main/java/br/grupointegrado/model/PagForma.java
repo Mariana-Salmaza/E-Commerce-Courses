@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "pag_forma")
 public class PagForma {
 
+    @Id
+    private Integer id;
+
     @ManyToOne
     @JoinColumn(name = "id_pag")
     private Pagamento pagamento;

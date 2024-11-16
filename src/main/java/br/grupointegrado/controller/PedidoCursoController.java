@@ -75,7 +75,6 @@ public class PedidoCursoController {
         return ResponseEntity.ok(pedidoCursoDTO);
     }
 
-    // Atualizar PedidoCurso
     @PutMapping("/{id}")
     public ResponseEntity<PedidoCursoRequestDTO> atualizarPedidoCurso(@PathVariable Integer id, @RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
         PedidoCurso pedidoCurso = pedidoCursoRepository.findById(id).orElse(null);

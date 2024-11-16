@@ -3,6 +3,7 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pagamento")
@@ -28,11 +29,11 @@ public class Pagamento {
         joinColumns = @JoinColumn(name = "id_pag"),
         inverseJoinColumns = @JoinColumn(name = "id_forma")
     )
-    private FormaPagamento formaPagamento;
+    private List<FormaPagamento> formaPagamento; 
 
     public Pagamento() {}
 
-    public Pagamento(BigDecimal valor, FormaPagamento formaPagamento, String status, Date dataPagamento) {
+    public Pagamento(BigDecimal valor, List<FormaPagamento> formaPagamento, String status, Date dataPagamento) {
         this.valor = valor;
         this.formaPagamento = formaPagamento;
         this.status = status;
@@ -71,11 +72,11 @@ public class Pagamento {
         this.status = status;
     }
 
-    public FormaPagamento getFormaPagamento() {
+    public List<FormaPagamento> getFormaPagamento() {
         return formaPagamento;
     }
 
-    public void setFormaPagamento(FormaPagamento formaPagamento) {
+    public void setFormaPagamento(List<FormaPagamento> formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
 

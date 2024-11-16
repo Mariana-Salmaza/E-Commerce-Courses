@@ -23,22 +23,30 @@ public class PagamentoController {
     private FormaPagamentoRepository formaPagamentoRepository;
 
     private Pagamento converterParaEntidade(PagamentoRequestDTO dto) {
-        FormaPagamento formaPagamento = formaPagamentoRepository.findById(dto.idFormaPagamento())
-                .orElseThrow(() -> new IllegalArgumentException("Forma de pagamento não encontrada"));
+
+        List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(dto.idsFormasPagamento());
+        if (formasPagamento.isEmpty()) {
+            throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
+        }
         return new Pagamento(
                 dto.valorPedido(),
-                formaPagamento,
+                formasPagamento,
                 dto.statusPagamento(),
                 dto.dataPagamento());
     }
 
     private PagamentoRequestDTO converterParaDTO(Pagamento pagamento) {
+
+        List<Integer> idsFormasPagamento = pagamento.getFormaPagamento().stream()
+                .map(FormaPagamento::getIdForma)
+                .collect(Collectors.toList());
+
         return new PagamentoRequestDTO(
                 pagamento.getIdPagamento(),
                 pagamento.getValor(),
                 pagamento.getDataPagamento(),
                 pagamento.getStatus(),
-                pagamento.getFormaPagamento().getIdForma());
+                idsFormasPagamento);
     }
 
     @PostMapping
@@ -79,11 +87,14 @@ public class PagamentoController {
         pagamento.setValor(pagamentoDTO.valorPedido());
         pagamento.setStatus(pagamentoDTO.statusPagamento());
         pagamento.setDataPagamento(pagamentoDTO.dataPagamento());
-        FormaPagamento formaPagamento = formaPagamentoRepository.findById(pagamentoDTO.idFormaPagamento())
-                .orElseThrow(() -> new IllegalArgumentException("Forma de pagamento não encontrada"));
-        pagamento.setFormaPagamento(formaPagamento);
-        Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
 
+        List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(pagamentoDTO.idsFormasPagamento());
+        if (formasPagamento.isEmpty()) {
+            throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
+        }
+        pagamento.setFormaPagamento(formasPagamento);
+
+        Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
         PagamentoRequestDTO pagamentoAtualizadoDTO = converterParaDTO(pagamentoAtualizado);
         return ResponseEntity.ok(pagamentoAtualizadoDTO);
     }

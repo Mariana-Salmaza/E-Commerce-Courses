@@ -16,6 +16,7 @@ import java.util.List;
 public class CursoController {
 
     @Autowired
+    // Autowired, inversão de controle, serve para fazer a injeção de depêndencia
     private CursoRepository repository;
 
     @GetMapping
@@ -69,7 +70,7 @@ public class CursoController {
         return ResponseEntity.ok(curso);
     }
 
-    @PostMapping("/{id}/valor")
+    @PutMapping("/{id}/valor")
     public ResponseEntity<Curso> updateValorCurso(@PathVariable Integer id,
             @RequestBody BigDecimal valorCurso) {
 
@@ -82,16 +83,17 @@ public class CursoController {
         return ResponseEntity.ok(curso);
     }
 
-    @PostMapping("/{id}/descricao")
+    @PutMapping("/{id}/descricao")
     public ResponseEntity<Curso> updateDescricaoCurso(@PathVariable Integer id,
             @RequestBody String descricao) {
 
         Curso curso = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Curso não foi encontrado"));
 
-                curso.setDescricao(descricao); 
+        curso.setDescricao(descricao);
 
         this.repository.save(curso);
         return ResponseEntity.ok(curso);
     }
+
 }
