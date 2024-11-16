@@ -29,7 +29,7 @@ public class CursoController {
     public Curso findById(@PathVariable Integer id) {
         return this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Curso não foi encontrado"));
-    }
+    }   
 
     @PostMapping
     public ResponseEntity<Curso> save(@RequestBody CursoRequestDTO dto) {

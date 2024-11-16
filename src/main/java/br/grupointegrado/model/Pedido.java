@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "pedido")
+@Table(name = "Pedido")
 public class Pedido {
 
     @Id
@@ -13,11 +13,11 @@ public class Pedido {
     private Integer idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_pag")
+    @JoinColumn(name = "id_pag", referencedColumnName = "id_pag")
     private Pagamento pagamento;
 
     @Column(name = "pago", nullable = false)

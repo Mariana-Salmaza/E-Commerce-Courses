@@ -4,6 +4,7 @@ import br.grupointegrado.dto.PedidoCursoRequestDTO;
 import br.grupointegrado.model.PedidoCurso;
 import br.grupointegrado.model.Pedido;
 import br.grupointegrado.model.Curso;
+import br.grupointegrado.model.PedidoCursoPK;
 import br.grupointegrado.repository.PedidoCursoRepository;
 import br.grupointegrado.repository.PedidoRepository;
 import br.grupointegrado.repository.CursoRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -65,23 +67,25 @@ public class PedidoCursoController {
         return ResponseEntity.ok(pedidoCursosDTO);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PedidoCursoRequestDTO> buscarPedidoCurso(@PathVariable Integer id) {
-        PedidoCurso pedidoCurso = pedidoCursoRepository.findById(id).orElse(null);
-        if (pedidoCurso == null) {
-            return ResponseEntity.notFound().build();
-        }
-        PedidoCursoRequestDTO pedidoCursoDTO = converterParaDTO(pedidoCurso);
-        return ResponseEntity.ok(pedidoCursoDTO);
+    @GetMapping("/{idPedido}/{idCurso}")
+    public ResponseEntity<PedidoCursoRequestDTO> buscarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso) {
+        PedidoCursoPK id = new PedidoCursoPK(idPedido, idCurso);
+        Optional<PedidoCurso> pedidoCurso = pedidoCursoRepository.findById(id);
+        return pedidoCurso.map(p -> ResponseEntity.ok(converterParaDTO(p)))
+                          .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PedidoCursoRequestDTO> atualizarPedidoCurso(@PathVariable Integer id, @RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
-        PedidoCurso pedidoCurso = pedidoCursoRepository.findById(id).orElse(null);
-        if (pedidoCurso == null) {
+    @PutMapping("/{idPedido}/{idCurso}")
+    public ResponseEntity<PedidoCursoRequestDTO> atualizarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso, @RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
+
+        PedidoCursoPK id = new PedidoCursoPK(idPedido, idCurso);
+        Optional<PedidoCurso> pedidoCursoOptional = pedidoCursoRepository.findById(id);
+        
+        if (pedidoCursoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
+        PedidoCurso pedidoCurso = pedidoCursoOptional.get();
         Curso curso = cursoRepository.findById(pedidoCursoDTO.idCurso())
                 .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
         Pedido pedido = pedidoRepository.findById(pedidoCursoDTO.idPedido())
@@ -96,8 +100,9 @@ public class PedidoCursoController {
         return ResponseEntity.ok(pedidoCursoAtualizadoDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPedidoCurso(@PathVariable Integer id) {
+    @DeleteMapping("/{idPedido}/{idCurso}")
+    public ResponseEntity<Void> deletarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso) {
+        PedidoCursoPK id = new PedidoCursoPK(idPedido, idCurso);
         if (pedidoCursoRepository.existsById(id)) {
             pedidoCursoRepository.deleteById(id);
             return ResponseEntity.noContent().build();

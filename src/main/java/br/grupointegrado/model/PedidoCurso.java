@@ -3,30 +3,31 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "pedido_curso")
+@Table(name = "Pedido_Curso")
 public class PedidoCurso {
 
-    @Id
-    private Integer id;
+    @EmbeddedId
+    private PedidoCursoPK id;
 
     @ManyToOne
-    @JoinColumn(name = "id_curso")
-    private Curso curso;
-
-    @ManyToOne
-    @JoinColumn(name = "id_pedido")
+    @MapsId("idPedido")
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
     private Pedido pedido;
+
+    @ManyToOne
+    @MapsId("idCurso")
+    @JoinColumn(name = "id_curso", referencedColumnName = "id_curso")
+    private Curso curso;
 
     @Column(name = "quantidade")
     private Integer quantidade;
 
-    
-    public Curso getCurso() {
-        return curso;
+    public PedidoCursoPK getId() {
+        return id;
     }
 
-    public void setCurso(Curso curso) {
-        this.curso = curso;
+    public void setId(PedidoCursoPK id) {
+        this.id = id;
     }
 
     public Pedido getPedido() {
@@ -37,20 +38,19 @@ public class PedidoCurso {
         this.pedido = pedido;
     }
 
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
     public Integer getQuantidade() {
         return quantidade;
     }
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
-    }
-
-    @Override
-    public String toString() {
-        return "PedidoCurso{" +
-                "curso=" + curso +
-                ", pedido=" + pedido +
-                ", quantidade=" + quantidade +
-                '}';
     }
 }

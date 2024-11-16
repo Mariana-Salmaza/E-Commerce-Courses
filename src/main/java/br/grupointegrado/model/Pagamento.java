@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "pagamento")
+@Table(name = "Pagamento")
 public class Pagamento {
 
     @Id
@@ -29,7 +29,8 @@ public class Pagamento {
         joinColumns = @JoinColumn(name = "id_pag"),
         inverseJoinColumns = @JoinColumn(name = "id_forma")
     )
-    private List<FormaPagamento> formaPagamento; 
+    
+    private List<FormaPagamento> formaPagamento;
 
     public Pagamento() {}
 
