@@ -3,7 +3,7 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Pag_Forma")
+@Table(name = "pag_forma")
 public class PagForma {
 
     @Id

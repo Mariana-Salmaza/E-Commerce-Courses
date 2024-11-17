@@ -38,8 +38,10 @@ public class CursoController {
         }
 
         Curso curso = new Curso();
+        curso.setIdCurso(dto.idCurso());
         curso.setNomeCurso(dto.nomeCurso());
         curso.setValorCurso(dto.valorCurso());
+        curso.setDescricao(dto.descricao());
 
         this.repository.save(curso);
         return ResponseEntity.ok(curso);

@@ -3,7 +3,7 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Pedido_Curso")
+@Table(name = "pedido_curso")
 public class PedidoCurso {
 
     @EmbeddedId
