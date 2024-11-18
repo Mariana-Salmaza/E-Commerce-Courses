@@ -15,8 +15,8 @@ CREATE TABLE pag_forma (
     id_pag INT,
     id_forma INT,
     PRIMARY KEY (id_pag, id_forma),
-    FOREIGN KEY (id_pag) REFERENCES Pagamento(id_pag) ON DELETE CASCADE,
-    FOREIGN KEY (id_forma) REFERENCES Forma_Pagamento(id_forma) ON DELETE CASCADE
+    FOREIGN KEY (id_pag) REFERENCES pagamento(id_pag) ON DELETE CASCADE,
+    FOREIGN KEY (id_forma) REFERENCES forma_pagamento(id_forma) ON DELETE CASCADE
 );
 
 CREATE TABLE user (
@@ -41,8 +41,8 @@ CREATE TABLE pedido (
     id_pag INT,
     pago BOOLEAN NOT NULL,
     data_pedido DATETIME NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (id_pag) REFERENCES Pagamento(id_pag) ON DELETE CASCADE
+    FOREIGN KEY (id_user) REFERENCES user(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_pag) REFERENCES pagamento(id_pag) ON DELETE CASCADE
 );
 
 CREATE TABLE pedido_curso (
@@ -50,16 +50,16 @@ CREATE TABLE pedido_curso (
     id_pedido INT,
     PRIMARY KEY (id_curso, id_pedido),
     quantidade INT NOT NULL,
-    FOREIGN KEY (id_curso) REFERENCES Curso(id_curso) ON DELETE CASCADE,
-    FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido) ON DELETE CASCADE
+    FOREIGN KEY (id_curso) REFERENCES curso(id_curso) ON DELETE CASCADE,
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido) ON DELETE CASCADE
 );
 
 CREATE TABLE auditoria (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    dt DATETIME NOT NULL,
-    tabela_afetada VARCHAR(50) NOT NULL,
-    acao VARCHAR(50) NOT NULL,
+    id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+    id_curso INT NOT NULL,
+    dt DATE NOT NULL,
+    valor_antigo DECIMAL(10, 2),
+    valor_novo DECIMAL(10, 2),
     mot VARCHAR(255),
-    dados_anteriores TEXT,
-    dados_novos TEXT
+    CONSTRAINT fk_auditoria FOREIGN KEY (id_curso) REFERENCES curso(id_curso)
 );

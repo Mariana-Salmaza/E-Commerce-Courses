@@ -10,7 +10,7 @@ public class PedidoCurso {
     private PedidoCursoPK id;
 
     @ManyToOne
-    @MapsId("idPedido")
+    @MapsId("idPedido") 
     @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
     private Pedido pedido;
 
@@ -22,11 +22,15 @@ public class PedidoCurso {
     @Column(name = "quantidade")
     private Integer quantidade;
 
+
     public PedidoCursoPK getId() {
         return id;
     }
 
     public void setId(PedidoCursoPK id) {
+        if (id == null || id.getIdPedido() == null || id.getIdCurso() == null) {
+            throw new IllegalArgumentException("A chave composta não pode ser nula");
+        }
         this.id = id;
     }
 
@@ -35,6 +39,9 @@ public class PedidoCurso {
     }
 
     public void setPedido(Pedido pedido) {
+        if (pedido == null) {
+            throw new IllegalArgumentException("Pedido não pode ser nulo");
+        }
         this.pedido = pedido;
     }
 
@@ -43,6 +50,9 @@ public class PedidoCurso {
     }
 
     public void setCurso(Curso curso) {
+        if (curso == null) {
+            throw new IllegalArgumentException("Curso não pode ser nulo");
+        }
         this.curso = curso;
     }
 
@@ -51,6 +61,9 @@ public class PedidoCurso {
     }
 
     public void setQuantidade(Integer quantidade) {
+        if (quantidade == null) {
+            throw new IllegalArgumentException("Quantidade não pode ser nula");
+        }
         this.quantidade = quantidade;
     }
 }

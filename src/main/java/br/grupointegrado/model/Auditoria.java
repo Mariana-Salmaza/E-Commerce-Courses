@@ -1,7 +1,8 @@
 package br.grupointegrado.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "auditoria")
@@ -9,69 +10,72 @@ public class Auditoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "id_auditoria")
+    private Integer idAuditoria;
+
+    @Column(name = "id_curso", nullable = false)
+    private Integer idCurso;
 
     @Column(name = "dt", nullable = false)
-    private Date data;
+    private LocalDate data;
 
-    @Column(name = "tabela_afetada", nullable = false, length = 50)
-    private String tabelaAfetada;
+    @Column(name = "valor_antigo")
+    private BigDecimal valorAntigo;
 
-    @Column(name = "acao", nullable = false, length = 50)
-    private String acao;
+    @Column(name = "valor_novo")
+    private BigDecimal valorNovo;
 
     @Column(name = "mot", length = 255)
     private String motivo;
 
-    @Column(name = "dados_anteriores", columnDefinition = "TEXT")
-    private String dadosAnteriores;
-
-    @Column(name = "dados_novos", columnDefinition = "TEXT")
-    private String dadosNovos;
-
-
     public Auditoria() {}
 
-    public Auditoria(String tabelaAfetada, String acao, String motivo, Date data, String dadosAnteriores, String dadosNovos) {
-        this.tabelaAfetada = tabelaAfetada;
-        this.acao = acao;
-        this.motivo = motivo;
+    public Auditoria(Integer idCurso, LocalDate data, BigDecimal valorAntigo, BigDecimal valorNovo, String motivo) {
+        this.idCurso = idCurso;
         this.data = data;
-        this.dadosAnteriores = dadosAnteriores;
-        this.dadosNovos = dadosNovos;
+        this.valorAntigo = valorAntigo;
+        this.valorNovo = valorNovo;
+        this.motivo = motivo;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdAuditoria() {
+        return idAuditoria;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdAuditoria(Integer idAuditoria) {
+        this.idAuditoria = idAuditoria;
     }
 
-    public Date getData() {
+    public Integer getIdCurso() {
+        return idCurso;
+    }
+
+    public void setIdCurso(Integer idCurso) {
+        this.idCurso = idCurso;
+    }
+
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
-    public String getTabelaAfetada() {
-        return tabelaAfetada;
+    public BigDecimal getValorAntigo() {
+        return valorAntigo;
     }
 
-    public void setTabelaAfetada(String tabelaAfetada) {
-        this.tabelaAfetada = tabelaAfetada;
+    public void setValorAntigo(BigDecimal valorAntigo) {
+        this.valorAntigo = valorAntigo;
     }
 
-    public String getAcao() {
-        return acao;
+    public BigDecimal getValorNovo() {
+        return valorNovo;
     }
 
-    public void setAcao(String acao) {
-        this.acao = acao;
+    public void setValorNovo(BigDecimal valorNovo) {
+        this.valorNovo = valorNovo;
     }
 
     public String getMotivo() {
@@ -82,32 +86,15 @@ public class Auditoria {
         this.motivo = motivo;
     }
 
-    public String getDadosAnteriores() {
-        return dadosAnteriores;
-    }
-
-    public void setDadosAnteriores(String dadosAnteriores) {
-        this.dadosAnteriores = dadosAnteriores;
-    }
-
-    public String getDadosNovos() {
-        return dadosNovos;
-    }
-
-    public void setDadosNovos(String dadosNovos) {
-        this.dadosNovos = dadosNovos;
-    }
-
     @Override
     public String toString() {
         return "Auditoria{" +
-                "id=" + id +
+                "idAuditoria=" + idAuditoria +
+                ", idCurso=" + idCurso +
                 ", data=" + data +
-                ", tabelaAfetada='" + tabelaAfetada + '\'' +
-                ", acao='" + acao + '\'' +
+                ", valorAntigo=" + valorAntigo +
+                ", valorNovo=" + valorNovo +
                 ", motivo='" + motivo + '\'' +
-                ", dadosAnteriores='" + dadosAnteriores + '\'' +
-                ", dadosNovos='" + dadosNovos + '\'' +
                 '}';
     }
 }

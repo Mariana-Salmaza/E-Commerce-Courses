@@ -17,8 +17,11 @@ public class User {
     @Column(name = "email_user", nullable = false, unique = true, length = 100)
     private String emailUser;
 
-    @Column(name = "senha_user", nullable = false, length = 255)
-    private String senhaUser;
+    @Column(name = "data_nascimento", nullable = false, length = 15)
+    private String dataNascimento;
+
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
 
     public Integer getIdUser() {
         return idUser;
@@ -44,21 +47,26 @@ public class User {
         this.emailUser = emailUser;
     }
 
-    public String getSenhaUser() {
-        return senhaUser;
+    public String getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setSenhaUser(String senhaUser) {
-        this.senhaUser = senhaUser;
+    public void setDataNascimento(String dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "idUser=" + idUser +
-                ", nomeUser='" + nomeUser + '\'' +
-                ", emailUser='" + emailUser + '\'' +
-                ", senhaUser='" + senhaUser + '\'' +
-                '}';
+        return "User [idUser=" + idUser + ", nomeUser=" + nomeUser + ", emailUser=" + emailUser + ", dataNascimento="
+                + dataNascimento + ", phone=" + phone + "]";
     }
+
 }

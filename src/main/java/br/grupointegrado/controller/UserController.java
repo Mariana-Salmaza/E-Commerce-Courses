@@ -18,7 +18,13 @@ public class UserController {
     private UserRepository userRepository;
 
     private UserRequestDTO converterParaDTO(User user) {
-        return new UserRequestDTO(user.getIdUser(), user.getNomeUser(), user.getEmailUser(), user.getSenhaUser());
+        return new UserRequestDTO(
+                user.getIdUser(),
+                user.getNomeUser(),
+                user.getEmailUser(),
+                user.getDataNascimento(),
+                user.getPhone()
+        );
     }
 
     private User converterParaEntidade(UserRequestDTO userDTO) {
@@ -26,7 +32,8 @@ public class UserController {
         user.setIdUser(userDTO.idUser());
         user.setNomeUser(userDTO.nomeUser());
         user.setEmailUser(userDTO.emailUser());
-        user.setSenhaUser(userDTO.senhaUser());
+        user.setDataNascimento(userDTO.dataNascimento());
+        user.setPhone(userDTO.phone());
         return user;
     }
 
@@ -34,7 +41,7 @@ public class UserController {
     public ResponseEntity<UserRequestDTO> createUser(@RequestBody UserRequestDTO userDTO) {
         User user = converterParaEntidade(userDTO);
         userRepository.save(user);
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(converterParaDTO(user));
     }
 
     @GetMapping
@@ -56,7 +63,6 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<UserRequestDTO> updateUser(@PathVariable Integer id, @RequestBody UserRequestDTO userDTO) {
         User user = userRepository.findById(id).orElse(null);
@@ -66,7 +72,8 @@ public class UserController {
 
         user.setNomeUser(userDTO.nomeUser());
         user.setEmailUser(userDTO.emailUser());
-        user.setSenhaUser(userDTO.senhaUser());
+        user.setDataNascimento(userDTO.dataNascimento());
+        user.setPhone(userDTO.phone());
 
         userRepository.save(user);
         UserRequestDTO updatedUserDTO = converterParaDTO(user);

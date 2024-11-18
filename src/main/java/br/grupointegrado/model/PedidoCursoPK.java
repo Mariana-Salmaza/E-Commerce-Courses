@@ -1,48 +1,57 @@
 package br.grupointegrado.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-
+import java.util.Objects;
 
 @Embeddable
 public class PedidoCursoPK implements Serializable {
 
+    @Column(name = "id_pedido")
     private Integer idPedido;
+
+    @Column(name = "id_curso")
     private Integer idCurso;
 
+    public PedidoCursoPK() {}
+
     public PedidoCursoPK(Integer idPedido, Integer idCurso) {
+        if (idPedido == null || idCurso == null) {
+            throw new IllegalArgumentException("Os IDs não podem ser nulos");
+        }
         this.idPedido = idPedido;
         this.idCurso = idCurso;
     }
 
-    public PedidoCursoPK() {}
-
     public Integer getIdPedido() {
         return idPedido;
-    }
-
-    public void setIdPedido(Integer idPedido) {
-        this.idPedido = idPedido;
     }
 
     public Integer getIdCurso() {
         return idCurso;
     }
 
-    public void setIdCurso(Integer idCurso) {
-        this.idCurso = idCurso;
+    @Override
+    public int hashCode() {
+        return Objects.hash(idPedido, idCurso);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         PedidoCursoPK that = (PedidoCursoPK) o;
-        return idPedido.equals(that.idPedido) && idCurso.equals(that.idCurso);
+        return Objects.equals(idPedido, that.idPedido) &&
+               Objects.equals(idCurso, that.idCurso);
     }
 
     @Override
-    public int hashCode() {
-        return 31 * idPedido.hashCode() + idCurso.hashCode();
+    public String toString() {
+        return "PedidoCursoPK{" +
+               "idPedido=" + idPedido +
+               ", idCurso=" + idCurso +
+               '}';
     }
 }

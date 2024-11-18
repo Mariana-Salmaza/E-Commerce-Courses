@@ -1,7 +1,7 @@
 package br.grupointegrado.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pedido")
@@ -20,12 +20,14 @@ public class Pedido {
     @JoinColumn(name = "id_pag", referencedColumnName = "id_pag")
     private Pagamento pagamento;
 
-    @Column(name = "pago", nullable = false)
+    @Column(name = "pago")
     private Boolean pago;
 
-    @Column(name = "data_pedido", nullable = false)
-    private Date dataPedido;
+    @Column(name = "data_pedido")
+    private java.util.Date dataPedido;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<PedidoCurso> pedidoCursos;
 
     public Integer getIdPedido() {
         return idPedido;
@@ -59,22 +61,19 @@ public class Pedido {
         this.pago = pago;
     }
 
-    public Date getDataPedido() {
+    public java.util.Date getDataPedido() {
         return dataPedido;
     }
 
-    public void setDataPedido(Date dataPedido) {
+    public void setDataPedido(java.util.Date dataPedido) {
         this.dataPedido = dataPedido;
     }
 
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "idPedido=" + idPedido +
-                ", user=" + user +
-                ", pagamento=" + pagamento +
-                ", pago=" + pago +
-                ", dataPedido=" + dataPedido +
-                '}';
+    public List<PedidoCurso> getPedidoCursos() {
+        return pedidoCursos;
+    }
+
+    public void setPedidoCursos(List<PedidoCurso> pedidoCursos) {
+        this.pedidoCursos = pedidoCursos;
     }
 }

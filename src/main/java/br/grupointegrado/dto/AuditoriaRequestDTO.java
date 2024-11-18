@@ -1,7 +1,7 @@
 package br.grupointegrado.dto;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
-public record AuditoriaRequestDTO(Integer id, Date data, String tabelaAfetada, String acao, String motivo,
-                                  String dadosAnteriores, String dadosNovos) {
+public record AuditoriaRequestDTO(Integer idAuditoria, Integer idCurso, LocalDate data, BigDecimal valorAntigo, BigDecimal valorNovo, String motivo) {
 }
