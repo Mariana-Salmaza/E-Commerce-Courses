@@ -1,7 +1,8 @@
 CREATE TABLE forma_pagamento (
     id_forma INT AUTO_INCREMENT PRIMARY KEY,
     nome_forma VARCHAR(50) NOT NULL,
-    descricao TEXT
+    descricao TEXT,
+    tipo_pagamento VARCHAR(50)
 );
 
 CREATE TABLE pagamento (

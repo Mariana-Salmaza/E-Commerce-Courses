@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "forma_pagamento")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Estratégia para uma única tabela
+@DiscriminatorColumn(name = "tipo_pagamento", discriminatorType = DiscriminatorType.STRING)  // Coluna para diferenciar os tipos
 public class FormaPagamento {
 
     @Id
