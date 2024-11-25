@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/pagamentos")
 public class PagamentoController {
@@ -23,11 +22,8 @@ public class PagamentoController {
     private FormaPagamentoRepository formaPagamentoRepository;
 
     private Pagamento converterParaEntidade(PagamentoRequestDTO dto) {
-
+       
         List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(dto.idsFormasPagamento());
-        if (formasPagamento.isEmpty()) {
-            throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
-        }
         return new Pagamento(
                 dto.valorPedido(),
                 formasPagamento,
@@ -36,7 +32,7 @@ public class PagamentoController {
     }
 
     private PagamentoRequestDTO converterParaDTO(Pagamento pagamento) {
-
+       
         List<Integer> idsFormasPagamento = pagamento.getFormaPagamento().stream()
                 .map(FormaPagamento::getIdForma)
                 .collect(Collectors.toList());
@@ -84,16 +80,16 @@ public class PagamentoController {
             return ResponseEntity.notFound().build();
         }
 
+        
         pagamento.setValor(pagamentoDTO.valorPedido());
         pagamento.setStatus(pagamentoDTO.statusPagamento());
         pagamento.setDataPagamento(pagamentoDTO.dataPagamento());
 
+        
         List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(pagamentoDTO.idsFormasPagamento());
-        if (formasPagamento.isEmpty()) {
-            throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
-        }
         pagamento.setFormaPagamento(formasPagamento);
 
+       
         Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
         PagamentoRequestDTO pagamentoAtualizadoDTO = converterParaDTO(pagamentoAtualizado);
         return ResponseEntity.ok(pagamentoAtualizadoDTO);

@@ -1,20 +1,20 @@
 package br.grupointegrado.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("PIX") 
+@DiscriminatorValue("PIX")
 public class Pix extends FormaPagamento {
 
+    @Column(name = "chave_pix")
     private String chavePix;
+
+    public Pix() {
+    }
 
     public Pix(String nomeForma, String descricao, String chavePix) {
         super(nomeForma, descricao);
         this.chavePix = chavePix;
-    }
-
-    public Pix() {
     }
 
     public String getChavePix() {
@@ -26,9 +26,7 @@ public class Pix extends FormaPagamento {
     }
 
     @Override
-    public String toString() {
-        return "Pix{" +
-                "chavePix='" + chavePix + '\'' +
-                "} " + super.toString();
+    public String exibirDetalhes() {
+        return "Pagamento via Pix: " + getNomeForma() + " | Chave Pix: " + chavePix;
     }
 }
