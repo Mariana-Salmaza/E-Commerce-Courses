@@ -3,7 +3,7 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("PIX") 
+@DiscriminatorValue("Pix") 
 public class Pix extends FormaPagamento {
 
     public Pix() {
