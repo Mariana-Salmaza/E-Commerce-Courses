@@ -1,36 +1,47 @@
 package br.grupointegrado.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "pedido_curso")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PedidoCurso {
 
     @EmbeddedId
     private PedidoCursoPK id;
 
     @ManyToOne
-    @MapsId("idPedido") 
-    @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
+    @JoinColumn(name = "id_pedido", insertable = false, updatable = false)
+    @JsonIgnoreProperties("pedidoCurso")
+    @JsonBackReference  
     private Pedido pedido;
 
     @ManyToOne
-    @MapsId("idCurso")
-    @JoinColumn(name = "id_curso", referencedColumnName = "id_curso")
+    @JoinColumn(name = "id_curso", insertable = false, updatable = false)
     private Curso curso;
 
     @Column(name = "quantidade")
     private Integer quantidade;
 
 
+    public PedidoCurso() {}
+
+    public PedidoCurso(PedidoCursoPK id, Pedido pedido, Curso curso, Integer quantidade) {
+        this.id = id;
+        this.pedido = pedido;
+        this.curso = curso;
+        this.quantidade = quantidade;
+    }
+
     public PedidoCursoPK getId() {
         return id;
     }
 
     public void setId(PedidoCursoPK id) {
-        if (id == null || id.getIdPedido() == null || id.getIdCurso() == null) {
-            throw new IllegalArgumentException("A chave composta não pode ser nula");
-        }
         this.id = id;
     }
 
@@ -39,9 +50,6 @@ public class PedidoCurso {
     }
 
     public void setPedido(Pedido pedido) {
-        if (pedido == null) {
-            throw new IllegalArgumentException("Pedido não pode ser nulo");
-        }
         this.pedido = pedido;
     }
 
@@ -50,9 +58,6 @@ public class PedidoCurso {
     }
 
     public void setCurso(Curso curso) {
-        if (curso == null) {
-            throw new IllegalArgumentException("Curso não pode ser nulo");
-        }
         this.curso = curso;
     }
 
@@ -61,9 +66,6 @@ public class PedidoCurso {
     }
 
     public void setQuantidade(Integer quantidade) {
-        if (quantidade == null) {
-            throw new IllegalArgumentException("Quantidade não pode ser nula");
-        }
         this.quantidade = quantidade;
     }
 }

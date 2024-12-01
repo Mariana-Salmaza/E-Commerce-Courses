@@ -3,7 +3,13 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPedido")
 @Table(name = "pedido")
 public class Pedido {
 
@@ -14,10 +20,12 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
+    @JsonIgnoreProperties("pedidoCurso")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "id_forma", nullable = false)
+    @JsonIgnoreProperties("pedido")
     private FormaPagamento formaPagamento;
 
     @ManyToOne
@@ -25,6 +33,7 @@ public class Pedido {
     private Curso curso;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("pedido")
     private List<Pagamento> pagamentos;
 
     @Column(name = "pago")
@@ -35,9 +44,9 @@ public class Pedido {
     private java.util.Date dataPedido;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PedidoCurso> pedidoCursos;
 
-    // Getters e Setters
     public Integer getIdPedido() {
         return idPedido;
     }

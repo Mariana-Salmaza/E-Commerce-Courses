@@ -1,9 +1,9 @@
 package br.grupointegrado.controller;
 
 import br.grupointegrado.dto.PedidoCursoRequestDTO;
-import br.grupointegrado.model.PedidoCurso;
-import br.grupointegrado.model.Pedido;
 import br.grupointegrado.model.Curso;
+import br.grupointegrado.model.Pedido;
+import br.grupointegrado.model.PedidoCurso;
 import br.grupointegrado.model.PedidoCursoPK;
 import br.grupointegrado.repository.PedidoCursoRepository;
 import br.grupointegrado.repository.PedidoRepository;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pedido-cursos")
@@ -29,75 +28,49 @@ public class PedidoCursoController {
     @Autowired
     private CursoRepository cursoRepository;
 
-    private PedidoCursoRequestDTO converterParaDTO(PedidoCurso pedidoCurso) {
-        return new PedidoCursoRequestDTO(
-                pedidoCurso.getCurso().getIdCurso(),
-                pedidoCurso.getPedido().getIdPedido(),
-                pedidoCurso.getQuantidade()
-        );
-    }
-
-    private PedidoCurso converterParaEntidade(PedidoCursoRequestDTO dto) {
-        Curso curso = cursoRepository.findById(dto.idCurso())
-                .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
-        Pedido pedido = pedidoRepository.findById(dto.idPedido())
-                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
-
-        PedidoCurso pedidoCurso = new PedidoCurso();
-        pedidoCurso.setCurso(curso);
-        pedidoCurso.setPedido(pedido);
-        pedidoCurso.setQuantidade(dto.quantidade());
-        return pedidoCurso;
-    }
-
     @PostMapping
-    public ResponseEntity<PedidoCursoRequestDTO> criarPedidoCurso(@RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
-        PedidoCurso pedidoCurso = converterParaEntidade(pedidoCursoDTO);
+    public ResponseEntity<PedidoCurso> criarPedidoCurso(@RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
+        Pedido pedido = pedidoRepository.findById(pedidoCursoDTO.idPedido()).orElseThrow();
+        Curso curso = cursoRepository.findById(pedidoCursoDTO.idCurso()).orElseThrow();
+        
+        PedidoCursoPK pedidoCursoPK = new PedidoCursoPK(pedidoCursoDTO.idPedido(), pedidoCursoDTO.idCurso());
+        
+        PedidoCurso pedidoCurso = new PedidoCurso();
+        pedidoCurso.setId(pedidoCursoPK);
+        pedidoCurso.setPedido(pedido);
+        pedidoCurso.setCurso(curso);
+        pedidoCurso.setQuantidade(pedidoCursoDTO.quantidade());
+        
         PedidoCurso novoPedidoCurso = pedidoCursoRepository.save(pedidoCurso);
-        PedidoCursoRequestDTO novoPedidoCursoDTO = converterParaDTO(novoPedidoCurso);
-        return ResponseEntity.ok(novoPedidoCursoDTO);
+        return ResponseEntity.ok(novoPedidoCurso);
     }
+    
 
     @GetMapping
-    public ResponseEntity<List<PedidoCursoRequestDTO>> listarPedidoCursos() {
+    public ResponseEntity<List<PedidoCurso>> listarPedidoCursos() {
         List<PedidoCurso> pedidoCursos = pedidoCursoRepository.findAll();
-        List<PedidoCursoRequestDTO> pedidoCursosDTO = pedidoCursos.stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(pedidoCursosDTO);
+        return ResponseEntity.ok(pedidoCursos);
     }
 
     @GetMapping("/{idPedido}/{idCurso}")
-    public ResponseEntity<PedidoCursoRequestDTO> buscarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso) {
-        PedidoCursoPK id = new PedidoCursoPK(idPedido, idCurso);
-        Optional<PedidoCurso> pedidoCurso = pedidoCursoRepository.findById(id);
-        return pedidoCurso.map(p -> ResponseEntity.ok(converterParaDTO(p)))
-                          .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<PedidoCurso> buscarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso) {
+        Optional<PedidoCurso> pedidoCurso = pedidoCursoRepository.findById(new PedidoCursoPK(idPedido, idCurso));
+        return pedidoCurso.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{idPedido}/{idCurso}")
-    public ResponseEntity<PedidoCursoRequestDTO> atualizarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso, @RequestBody PedidoCursoRequestDTO pedidoCursoDTO) {
-
-        PedidoCursoPK id = new PedidoCursoPK(idPedido, idCurso);
-        Optional<PedidoCurso> pedidoCursoOptional = pedidoCursoRepository.findById(id);
+    public ResponseEntity<PedidoCurso> atualizarPedidoCurso(@PathVariable Integer idPedido, @PathVariable Integer idCurso, @RequestBody PedidoCurso pedidoCurso) {
+        Optional<PedidoCurso> pedidoCursoOptional = pedidoCursoRepository.findById(new PedidoCursoPK(idPedido, idCurso));
         
         if (pedidoCursoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        PedidoCurso pedidoCurso = pedidoCursoOptional.get();
-        Curso curso = cursoRepository.findById(pedidoCursoDTO.idCurso())
-                .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
-        Pedido pedido = pedidoRepository.findById(pedidoCursoDTO.idPedido())
-                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
-
-        pedidoCurso.setCurso(curso);
-        pedidoCurso.setPedido(pedido);
-        pedidoCurso.setQuantidade(pedidoCursoDTO.quantidade());
-
-        PedidoCurso pedidoCursoAtualizado = pedidoCursoRepository.save(pedidoCurso);
-        PedidoCursoRequestDTO pedidoCursoAtualizadoDTO = converterParaDTO(pedidoCursoAtualizado);
-        return ResponseEntity.ok(pedidoCursoAtualizadoDTO);
+        PedidoCurso pedidoCursoExistente = pedidoCursoOptional.get();
+        pedidoCursoExistente.setQuantidade(pedidoCurso.getQuantidade());
+        
+        PedidoCurso pedidoCursoAtualizado = pedidoCursoRepository.save(pedidoCursoExistente);
+        return ResponseEntity.ok(pedidoCursoAtualizado);
     }
 
     @DeleteMapping("/{idPedido}/{idCurso}")
