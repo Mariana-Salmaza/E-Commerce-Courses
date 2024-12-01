@@ -1,20 +1,21 @@
 package br.grupointegrado.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_pagamento", discriminatorType = DiscriminatorType.STRING)
+@JsonIgnoreProperties({"pagamento"})
 public abstract class FormaPagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idForma;
-    
+
     private String nomeForma;
     private String descricao;
 
-    // Ajuste aqui: Use o nome "tipo_pagamento" como nome da coluna
     @Column(name = "tipo_pagamento", insertable = false, updatable = false)
     private String tipoPagamento;
 
@@ -24,7 +25,6 @@ public abstract class FormaPagamento {
         this.tipoPagamento = tipoPagamento;
     }
 
-    // Getters e setters
     public Integer getIdForma() {
         return idForma;
     }

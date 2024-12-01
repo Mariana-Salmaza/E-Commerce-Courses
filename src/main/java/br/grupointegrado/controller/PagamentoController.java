@@ -3,14 +3,17 @@ package br.grupointegrado.controller;
 import br.grupointegrado.dto.PagamentoRequestDTO;
 import br.grupointegrado.model.Pagamento;
 import br.grupointegrado.model.FormaPagamento;
+import br.grupointegrado.model.Pedido;
 import br.grupointegrado.repository.PagamentoRepository;
 import br.grupointegrado.repository.FormaPagamentoRepository;
+import br.grupointegrado.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/pagamentos")
 public class PagamentoController {
@@ -20,6 +23,9 @@ public class PagamentoController {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @GetMapping
     public ResponseEntity<List<Pagamento>> listarTodos() {
@@ -40,6 +46,9 @@ public class PagamentoController {
             return ResponseEntity.status(400).body(null);
         }
 
+        Pedido pedido = pedidoRepository.findById(dto.idPedido())
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
         List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(dto.idsFormasPagamento());
         if (formasPagamento.isEmpty()) {
             throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
@@ -49,46 +58,9 @@ public class PagamentoController {
         pagamento.setValor(dto.valorPedido());
         pagamento.setStatus(dto.statusPagamento());
         pagamento.setDataPagamento(dto.dataPagamento());
+        pagamento.setPedido(pedido);
         pagamento.setFormaPagamento(formasPagamento);
 
-        pagamentoRepository.save(pagamento);
-        return ResponseEntity.ok(pagamento);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Pagamento> atualizar(@PathVariable Integer id, @RequestBody PagamentoRequestDTO dto) {
-        Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado"));
-
-        List<FormaPagamento> formasPagamento = formaPagamentoRepository.findAllById(dto.idsFormasPagamento());
-        if (formasPagamento.isEmpty()) {
-            throw new IllegalArgumentException("Nenhuma forma de pagamento encontrada");
-        }
-
-        pagamento.setValor(dto.valorPedido());
-        pagamento.setStatus(dto.statusPagamento());
-        pagamento.setDataPagamento(dto.dataPagamento());
-        pagamento.setFormaPagamento(formasPagamento);
-
-        pagamentoRepository.save(pagamento);
-        return ResponseEntity.ok(pagamento);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado"));
-
-        pagamentoRepository.delete(pagamento);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/status")
-    public ResponseEntity<Pagamento> atualizarStatus(@PathVariable Integer id, @RequestBody String status) {
-        Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado"));
-
-        pagamento.setStatus(status);
         pagamentoRepository.save(pagamento);
         return ResponseEntity.ok(pagamento);
     }

@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 public class PagForma {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne
@@ -16,6 +18,14 @@ public class PagForma {
     @ManyToOne
     @JoinColumn(name = "id_forma")
     private FormaPagamento formaPagamento;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Pagamento getPagamento() {
         return pagamento;
@@ -35,6 +45,6 @@ public class PagForma {
 
     @Override
     public String toString() {
-        return "PagForma [pagamento=" + pagamento + ", formaPagamento=" + formaPagamento + "]";
+        return "PagForma [id=" + id + ", pagamento=" + pagamento + ", formaPagamento=" + formaPagamento + "]";
     }
 }

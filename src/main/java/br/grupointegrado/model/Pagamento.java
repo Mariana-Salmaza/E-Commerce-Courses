@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"pedido", "formaPagamento"})
 @Table(name = "pagamento")
 public class Pagamento {
 
@@ -14,7 +17,7 @@ public class Pagamento {
     @Column(name = "id_pag")
     private Integer idPagamento;
 
-    @ManyToOne
+    @ManyToOne(optional = false) // Indica que 'pedido' não pode ser nulo
     @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
     private Pedido pedido;
 
@@ -43,6 +46,7 @@ public class Pagamento {
         this.status = status;
         this.dataPagamento = dataPagamento;
     }
+
 
     public Integer getIdPagamento() {
         return idPagamento;

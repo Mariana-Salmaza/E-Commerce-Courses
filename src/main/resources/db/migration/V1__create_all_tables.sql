@@ -39,7 +39,7 @@ CREATE TABLE curso (
 
 CREATE TABLE pagamento (
     id_pag INT AUTO_INCREMENT PRIMARY KEY,
-    id_pedido INT,
+    id_pedido INT NOT NULL,
     vl_pedido DECIMAL(10, 2) NOT NULL,
     dt_pagamento DATETIME,
     status_pagamento VARCHAR(20) NOT NULL,
