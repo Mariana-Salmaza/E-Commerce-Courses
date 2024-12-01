@@ -3,32 +3,28 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "forma_pagamento")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_pagamento", discriminatorType = DiscriminatorType.STRING)
 public abstract class FormaPagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_forma")
     private Integer idForma;
-
-    @Column(name = "nome_forma", nullable = false, length = 50)
+    
     private String nomeForma;
-
-    @Column(name = "descricao")
     private String descricao;
 
+    // Ajuste aqui: Use o nome "tipo_pagamento" como nome da coluna
     @Column(name = "tipo_pagamento", insertable = false, updatable = false)
     private String tipoPagamento;
 
-    public FormaPagamento() {}
-
-    public FormaPagamento(String nomeForma, String descricao) {
+    public FormaPagamento(String nomeForma, String descricao, String tipoPagamento) {
         this.nomeForma = nomeForma;
         this.descricao = descricao;
+        this.tipoPagamento = tipoPagamento;
     }
 
+    // Getters e setters
     public Integer getIdForma() {
         return idForma;
     }
@@ -57,16 +53,9 @@ public abstract class FormaPagamento {
         return tipoPagamento;
     }
 
-    @Override
-    public String toString() {
-        return "FormaPagamento{" +
-                "idForma=" + idForma +
-                ", nomeForma='" + nomeForma + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", tipoPagamento='" + tipoPagamento + '\'' +
-                '}';
+    public void setTipoPagamento(String tipoPagamento) {
+        this.tipoPagamento = tipoPagamento;
     }
 
-    // Método abstrato para polimorfismo
     public abstract String exibirDetalhes();
 }

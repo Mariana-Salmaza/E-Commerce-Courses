@@ -5,5 +5,5 @@ import java.util.Date;
 import java.util.List;
 
 public record PagamentoRequestDTO(
-        Integer idPag, BigDecimal valorPedido, Date dataPagamento, String statusPagamento, List<Integer> idsFormasPagamento) {
+        Integer idPag, Integer idPedido, BigDecimal valorPedido, Date dataPagamento, String statusPagamento, List<Integer> idsFormasPagamento) {
 }

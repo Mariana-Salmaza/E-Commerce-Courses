@@ -38,13 +38,15 @@ public class PedidoCursoPK implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PedidoCursoPK that = (PedidoCursoPK) o;
-        return Objects.equals(idPedido, that.idPedido) &&
-               Objects.equals(idCurso, that.idCurso);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        PedidoCursoPK that = (PedidoCursoPK) obj;
+        return idPedido.equals(that.idPedido) && idCurso.equals(that.idCurso);
     }
 
     @Override

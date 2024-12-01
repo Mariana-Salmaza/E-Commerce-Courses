@@ -13,22 +13,31 @@ public class Pedido {
     private Integer idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_pag", referencedColumnName = "id_pag")
-    private Pagamento pagamento;
+    @JoinColumn(name = "id_forma", nullable = false)
+    private FormaPagamento formaPagamento;
+
+    @ManyToOne
+    @JoinColumn(name = "id_curso", nullable = false)
+    private Curso curso;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<Pagamento> pagamentos;
 
     @Column(name = "pago")
     private Boolean pago;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_pedido")
     private java.util.Date dataPedido;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<PedidoCurso> pedidoCursos;
 
+    // Getters e Setters
     public Integer getIdPedido() {
         return idPedido;
     }
@@ -45,12 +54,28 @@ public class Pedido {
         this.user = user;
     }
 
-    public Pagamento getPagamento() {
-        return pagamento;
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
     }
 
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
     }
 
     public Boolean getPago() {

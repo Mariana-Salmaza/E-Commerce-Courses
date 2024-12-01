@@ -99,7 +99,7 @@ public class PagFormaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPagForma(@PathVariable Integer id) {
         if (pagFormaRepository.existsById(id)) {
-            pagFormaRepository.deleteById(id);
+            pagFormaRepository.deleteById(id); 
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

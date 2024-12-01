@@ -3,19 +3,21 @@ package br.grupointegrado.controller;
 import br.grupointegrado.dto.PedidoRequestDTO;
 import br.grupointegrado.model.Pedido;
 import br.grupointegrado.model.User;
-import br.grupointegrado.model.Pagamento;
+import br.grupointegrado.model.Curso;
+import br.grupointegrado.model.FormaPagamento;
 import br.grupointegrado.repository.PedidoRepository;
 import br.grupointegrado.repository.UserRepository;
-import br.grupointegrado.repository.PagamentoRepository;
+import br.grupointegrado.repository.CursoRepository;  
+import br.grupointegrado.repository.FormaPagamentoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("/api/pedidos")
 public class PedidoController {
 
     @Autowired
@@ -25,88 +27,77 @@ public class PedidoController {
     private UserRepository userRepository;
 
     @Autowired
-    private PagamentoRepository pagamentoRepository;
+    private CursoRepository cursoRepository;
 
-    
-    private PedidoRequestDTO converterParaDTO(Pedido pedido) {
-        return new PedidoRequestDTO(
-                pedido.getIdPedido(),
-                pedido.getUser().getIdUser(),
-                pedido.getPagamento().getIdPagamento(),
-                pedido.getPago(),
-                pedido.getDataPedido()
-        );
-    }
+    @Autowired
+    private FormaPagamentoRepository formaPagamentoRepository;
 
-    private Pedido converterParaEntidade(PedidoRequestDTO dto) {
-        User user = userRepository.findById(dto.idUser())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-        Pagamento pagamento = pagamentoRepository.findById(dto.idPag())
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado"));
-
-        Pedido pedido = new Pedido();
-        pedido.setUser(user);
-        pedido.setPagamento(pagamento);
-        pedido.setPago(dto.pago());
-        pedido.setDataPedido(dto.dataPedido());
-        return pedido;
-    }
-
-    @PostMapping
-    public ResponseEntity<PedidoRequestDTO> criarPedido(@RequestBody PedidoRequestDTO pedidoDTO) {
-        Pedido pedido = converterParaEntidade(pedidoDTO);
-        Pedido novoPedido = pedidoRepository.save(pedido);
-        PedidoRequestDTO novoPedidoDTO = converterParaDTO(novoPedido);
-        return ResponseEntity.ok(novoPedidoDTO);
-    }
 
     @GetMapping
-    public ResponseEntity<List<PedidoRequestDTO>> listarPedidos() {
-        List<Pedido> pedidos = pedidoRepository.findAll();
-        List<PedidoRequestDTO> pedidosDTO = pedidos.stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(pedidosDTO);
+    public ResponseEntity<List<Pedido>> listarTodos() {
+        return ResponseEntity.ok(pedidoRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoRequestDTO> buscarPedido(@PathVariable Integer id) {
-        Pedido pedido = pedidoRepository.findById(id).orElse(null);
-        if (pedido == null) {
-            return ResponseEntity.notFound().build();
-        }
-        PedidoRequestDTO pedidoDTO = converterParaDTO(pedido);
-        return ResponseEntity.ok(pedidoDTO);
+    public ResponseEntity<Pedido> buscarPorId(@PathVariable Integer id) {
+        return pedidoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Pedido> salvar(@RequestBody PedidoRequestDTO dto) {
+        User user = userRepository.findById(dto.idUser()).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+        FormaPagamento formaPagamento = formaPagamentoRepository.findById(dto.idForma()).orElseThrow(() -> new IllegalArgumentException("Forma de pagamento não encontrada"));
+        Curso curso = cursoRepository.findById(dto.idCurso())
+            .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
+
+        Pedido pedido = new Pedido();
+        pedido.setUser(user);
+        pedido.setFormaPagamento(formaPagamento);
+        pedido.setCurso(curso);
+        pedido.setPago(dto.pago());
+        pedido.setDataPedido(dto.dataPedido());
+
+        return ResponseEntity.ok(pedidoRepository.save(pedido));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoRequestDTO> atualizarPedido(@PathVariable Integer id, @RequestBody PedidoRequestDTO pedidoDTO) {
-        Pedido pedido = pedidoRepository.findById(id).orElse(null);
-        if (pedido == null) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Pedido> atualizar(@PathVariable Integer id, @RequestBody PedidoRequestDTO dto) {
+        return pedidoRepository.findById(id)
+                .map(pedido -> {
+                    User user = userRepository.findById(dto.idUser()).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+                    FormaPagamento formaPagamento = formaPagamentoRepository.findById(dto.idForma()).orElseThrow(() -> new IllegalArgumentException("Forma de pagamento não encontrada"));
+                    Curso curso = cursoRepository.findById(dto.idCurso())
+                        .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
 
-        User user = userRepository.findById(pedidoDTO.idUser())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-        Pagamento pagamento = pagamentoRepository.findById(pedidoDTO.idPag())
-                .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado"));
+                    pedido.setUser(user);
+                    pedido.setFormaPagamento(formaPagamento);
+                    pedido.setCurso(curso);
+                    pedido.setPago(dto.pago());
+                    pedido.setDataPedido(dto.dataPedido());
 
-        pedido.setUser(user);
-        pedido.setPagamento(pagamento);
-        pedido.setPago(pedidoDTO.pago());
-        pedido.setDataPedido(pedidoDTO.dataPedido());
-
-        Pedido pedidoAtualizado = pedidoRepository.save(pedido);
-        PedidoRequestDTO pedidoAtualizadoDTO = converterParaDTO(pedidoAtualizado);
-        return ResponseEntity.ok(pedidoAtualizadoDTO);
+                    return ResponseEntity.ok(pedidoRepository.save(pedido));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPedido(@PathVariable Integer id) {
-        if (pedidoRepository.existsById(id)) {
-            pedidoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
+        pedidoRepository.delete(pedido);
+        return ResponseEntity.noContent().build();
+    }   
+
+    @PostMapping("/{id}/pago")
+    public ResponseEntity<Pedido> atualizarStatusPago(@PathVariable Integer id, @RequestBody Boolean pago) {
+        return pedidoRepository.findById(id)
+                .map(pedido -> {
+                    pedido.setPago(pago);
+                    return ResponseEntity.ok(pedidoRepository.save(pedido));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

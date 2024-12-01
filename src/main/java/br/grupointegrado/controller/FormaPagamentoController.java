@@ -19,22 +19,32 @@ public class FormaPagamentoController {
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
 
-
     private FormaPagamento converterParaEntidade(FormaPagamentoRequestDTO dto) {
+        
         if ("PIX".equalsIgnoreCase(dto.tipoPagamento())) {
-            return new Pix(dto.nomeForma(), dto.descricao(), null);
+            
+            return new Pix(dto.nomeForma(), dto.descricao());
         } else if ("CARTAO_CREDITO".equalsIgnoreCase(dto.tipoPagamento())) {
-            return new CartaoCredito(dto.nomeForma(), dto.descricao(), null, null);
+           
+            return new CartaoCredito(dto.nomeForma(), dto.descricao());
         } else {
+            
             throw new IllegalArgumentException("Tipo de pagamento inválido: " + dto.tipoPagamento());
         }
     }
-
+    
     @PostMapping
     public ResponseEntity<FormaPagamento> criarFormaPagamento(@RequestBody FormaPagamentoRequestDTO formaPagamentoDTO) {
-        FormaPagamento formaPagamento = converterParaEntidade(formaPagamentoDTO);
-        FormaPagamento novaFormaPagamento = formaPagamentoRepository.save(formaPagamento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaFormaPagamento);
+        try {
+        
+            FormaPagamento formaPagamento = converterParaEntidade(formaPagamentoDTO);
+        
+            FormaPagamento novaFormaPagamento = formaPagamentoRepository.save(formaPagamento);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novaFormaPagamento);
+        } catch (IllegalArgumentException e) {
+            
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @GetMapping

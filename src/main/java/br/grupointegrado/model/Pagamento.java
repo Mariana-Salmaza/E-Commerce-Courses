@@ -14,6 +14,10 @@ public class Pagamento {
     @Column(name = "id_pag")
     private Integer idPagamento;
 
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
+    private Pedido pedido;
+
     @Column(name = "vl_pedido", nullable = false)
     private BigDecimal valor;
 
@@ -29,7 +33,6 @@ public class Pagamento {
         joinColumns = @JoinColumn(name = "id_pag"),
         inverseJoinColumns = @JoinColumn(name = "id_forma")
     )
-    
     private List<FormaPagamento> formaPagamento;
 
     public Pagamento() {}
@@ -47,6 +50,14 @@ public class Pagamento {
 
     public void setIdPagamento(Integer idPagamento) {
         this.idPagamento = idPagamento;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public BigDecimal getValor() {
@@ -83,12 +94,8 @@ public class Pagamento {
 
     @Override
     public String toString() {
-        return "Pagamento{" +
-                "idPagamento=" + idPagamento +
-                ", valor=" + valor +
-                ", dataPagamento=" + dataPagamento +
-                ", status='" + status + '\'' +
-                ", formaPagamento=" + formaPagamento +
-                '}';
+        return "Pagamento [idPagamento=" + idPagamento + ", pedido=" + pedido + ", valor=" + valor
+                + ", dataPagamento=" + dataPagamento + ", status=" + status + ", formaPagamento=" + formaPagamento
+                + "]";
     }
 }

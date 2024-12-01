@@ -3,42 +3,19 @@ package br.grupointegrado.model;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("CARTAO_CREDITO")
+@DiscriminatorValue("Crédito")
 public class CartaoCredito extends FormaPagamento {
 
-    @Column(name = "numero_cartao")
-    private String numeroCartao;
-
-    @Column(name = "nome_titular")
-    private String nomeTitular;
-
     public CartaoCredito() {
+        super("Cartão de Crédito", "Pagamento via cartão de crédito", "Crédito"); 
     }
 
-    public CartaoCredito(String nomeForma, String descricao, String numeroCartao, String nomeTitular) {
-        super(nomeForma, descricao);
-        this.numeroCartao = numeroCartao;
-        this.nomeTitular = nomeTitular;
-    }
-
-    public String getNumeroCartao() {
-        return numeroCartao;
-    }
-
-    public void setNumeroCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
-    }
-
-    public String getNomeTitular() {
-        return nomeTitular;
-    }
-
-    public void setNomeTitular(String nomeTitular) {
-        this.nomeTitular = nomeTitular;
+    public CartaoCredito(String nomeForma, String descricao) {
+        super("Cartão de Crédito", "Pagamento via cartão de crédito", "Crédito");
     }
 
     @Override
     public String exibirDetalhes() {
-        return "Pagamento via Cartão de Crédito: " + getNomeForma() + " | Nome do Titular: " + nomeTitular;
+        return "Pagamento via Cartão de Crédito";
     }
 }
