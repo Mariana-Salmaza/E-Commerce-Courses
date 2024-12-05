@@ -4,27 +4,39 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "pag_forma")
+@IdClass(PagFormaId.class)
 public class PagForma {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "id_pag")
+    private Integer idPag;
+
+    @Id
+    @Column(name = "id_forma")
+    private Integer idForma;
 
     @ManyToOne
-    @JoinColumn(name = "id_pag")
+    @JoinColumn(name = "id_pag", insertable = false, updatable = false)
     private Pagamento pagamento;
 
     @ManyToOne
-    @JoinColumn(name = "id_forma")
+    @JoinColumn(name = "id_forma", insertable = false, updatable = false)
     private FormaPagamento formaPagamento;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdPag() {
+        return idPag;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdPag(Integer idPag) {
+        this.idPag = idPag;
+    }
+
+    public Integer getIdForma() {
+        return idForma;
+    }
+
+    public void setIdForma(Integer idForma) {
+        this.idForma = idForma;
     }
 
     public Pagamento getPagamento() {
@@ -41,10 +53,5 @@ public class PagForma {
 
     public void setFormaPagamento(FormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
-    }
-
-    @Override
-    public String toString() {
-        return "PagForma [id=" + id + ", pagamento=" + pagamento + ", formaPagamento=" + formaPagamento + "]";
     }
 }

@@ -17,7 +17,7 @@ CREATE TABLE forma_pagamento (
 
 
 CREATE TABLE pedido (
-    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_user INT,
     id_forma BIGINT,
     id_curso BIGINT,
